@@ -1,0 +1,53 @@
+<launch>
+
+  <!-- synchronizing time -->
+  <param name="use_sim_time" value="true" />
+  
+  <!-- TF -->
+  <!-- “world” to "map" tf -->
+  <node pkg="tf" type="static_transform_publisher" name="world_to_map" args="0 0 0 0 0 0 /world /map 100" />
+
+  <!-- "base_link" to "velodyne" tf -->
+  <node pkg="tf" type="static_transform_publisher" name="base_link_to_velodyne" args="0.4 0 1.389 0 0 0.0 /base_link /velodyne 100" />
+
+  <!-- gridmap loading -->
+  <!--node name="map_server" pkg="map_server" type="map_server" args="/home/ihrob/.autoware/HWpark_in/globalcostmap.yaml"/-->
+
+  <!-- Point Cloud -->
+<!--  <node pkg="map_file" type="points_map_loader" name="points_map_loader" args="noupdate /home/zmy/data/pcd/HW_all_0.05_part4/hdl_test_002.pcd /home/zmy/data/pcd/HW_all_0.05_part4/hdl_test_0033.pcd"/> -->
+
+ <!-- <node pkg="map_file" type="points_map_loader" name="points_map_loader" args="100 /home/zmy/data/pcd/HW_all_0.05_part4/binary_pcd" output="screen" />  -->
+<!--  <node pkg="map_file" type="points_map_loader" name="points_map_loader" args="100 $(env HOME)/.autoware/data/map/pointcloud_map/ 10" output="screen"/>-->
+
+ <!-- <include file="$(find octomap_server)/launch/octomap_server.launch" /> -->
+  <include file = "$(find map_loader)/launch/map_loader.launch" />
+
+  <!-- points downsampler -->
+  
+  <include file= "$(find points_downsampler)/launch/points_downsample.launch"/> 
+
+
+  <!-- ndt_matching -->
+  <include file="$(find lidar_localizer)/launch/ndt_matching.launch" /> 
+
+  <!-- nmea2tfpose -->
+ <!-- <include file="$(find gnss_localizer_)/launch/nmea2tfpose.launch"/> -->
+
+   <!-- points rayground_filter -->
+<!--  <include file="$(find points_preprocessor)/launch/ray_ground_mapping.launch" /> -->
+
+<!--  <include file="$(find points_preprocessor)/launch/ray_ground_filter.launch" />  -->
+
+  <!-- points2globalcostmap mapping -->
+
+  <!--include file="$(find object_map)/launch/points2globalcostmap.launch" /-->
+
+  <!-- points2costmap mapping --> 
+
+  <!--include file="$(find object_map)/launch/points2costmap.launch" /-->
+
+  <!-- move_base -->
+
+  <!--include file="$(find sf_keyop)/launch/move_base.launch"/-->
+
+</launch>

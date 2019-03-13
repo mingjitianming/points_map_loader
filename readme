@@ -1,0 +1,8 @@
+支持加载"bt"文件和"pcd"文件，使用方式：
+	rosrun map_loader map_loader_node [加载范围(m)] [地图文件夹的路径] [地图格式(默认 bt)]
+	
+在launch中使用例子：
+
+    <arg name="map_dir" default = "/home/zmy/data/pcd/test/octo" />
+
+    <node pkg="map_loader" type="map_loader_node" name="map_loader" args="100 $(arg map_dir)" output="screen" >

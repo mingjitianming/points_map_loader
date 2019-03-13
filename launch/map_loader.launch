@@ -1,0 +1,20 @@
+<launch>
+
+   <!-- <arg name="map_dir" default = "/home/zmy/data/pcd/map_12_24/octo" /> -->
+   <!-- <arg name="map_dir" default = "/home/zmy/data/pcd/map_01_24/octo" /> -->
+    <!-- <arg name="map_dir" default = "/home/zmy/data/pcd/map_12_24/down_sample" /> -->
+    <arg name="map_dir" default = "/home/zmy/data/pcd/map_01_24/down_sample" /> 
+ <!-- <arg name="map_dir" default = "/home/zmy/data/pcd/test/octo" />  -->
+ <!-- <arg name="map_dir" default = "/home/zmy/data/pcd/map_01_28/Folder/octo" />  -->
+   <!--  <arg name="map_dir" default = "/home/zmy/data/pcd/test" />  -->
+
+    <node pkg="map_loader" type="map_loader_node" name="map_loader" args="150 $(arg map_dir) pcd" output="screen" >
+
+        <!-- 过滤单个的噪点 -->
+        <param name="filterSpeckles" type="bool" value="false" /> 
+
+        <!-- topic from where pointcloud2 messages are subscribed -->
+       <!-- <remap from="/octomap_point_cloud_centers" to="points_map" /> -->
+
+    </node>
+</launch>
