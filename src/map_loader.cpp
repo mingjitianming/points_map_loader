@@ -10,7 +10,9 @@ MapLoader::MapLoader(double &margin, std::string &PATH, std::string map_format) 
     std::cout<<map_format_<<std::endl;
     nh_ = ros::NodeHandle("~");
     std::string home = std::getenv("HOME");
-    centroidFilePath_ = (home) + "/Autoware/ros/src/data/packages/map_file/nodes/points_map_loader/Centroidlist.txt";
+   // centroidFilePath_ = (home) + "/Autoware/ros/src/data/packages/map_file/nodes/points_map_loader/Centroidlist.txt";
+    centroidFilePath_ = "./Centroidlist.txt";
+    std::cout<<"lujing:"<<centroidFilePath_<<std::endl;
     filter_speckles = false;
     nh_.param("filterSpeckles", filter_speckles, filter_speckles);
     last_time = ros::Time::now();
