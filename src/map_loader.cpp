@@ -12,7 +12,6 @@ MapLoader::MapLoader(double &margin, std::string &PATH, std::string map_format) 
     std::string home = std::getenv("HOME");
    // centroidFilePath_ = (home) + "/Autoware/ros/src/data/packages/map_file/nodes/points_map_loader/Centroidlist.txt";
     centroidFilePath_ = "./Centroidlist.txt";
-    std::cout<<"lujing:"<<centroidFilePath_<<std::endl;
     filter_speckles = false;
     nh_.param("filterSpeckles", filter_speckles, filter_speckles);
     last_time = ros::Time::now();
@@ -22,10 +21,10 @@ MapLoader::MapLoader(double &margin, std::string &PATH, std::string map_format) 
     bool MapLoader::hadCentroidFile(const std::string& path)
     {
         struct stat st; // form <sys/stat.h>
-        return (stat(path.c_str(), &st) == 0);        
+        return (stat(path.c_str(), &st) == 0);
     }
 
-    bool MapLoader::sameDir(std::string& path1, std::string& path2)   
+    bool MapLoader::sameDir(std::string& path1, std::string& path2)
     {
         std::ifstream ifs(path2.c_str());
         if (!ifs.good())
@@ -38,7 +37,7 @@ MapLoader::MapLoader(double &margin, std::string &PATH, std::string map_format) 
         // std::getline(str, tmp_path,',');
         int index = line.find_last_of('/');
         tmp_path = line.substr(0,++index);
-        if (line.find(path1) == -1)
+        if (tmp_path.compare(path1) != 0)
             return false;
         else if (line.find("." + map_format_) == -1)
             return false;
@@ -133,14 +132,14 @@ MapLoader::MapLoader(double &margin, std::string &PATH, std::string map_format) 
 
     void MapLoader::computeBTCentroid(const std::vector<std::string> files)
     {
-        
+
         OcTreeT* m_octree = new OcTreeT(0.2);
      //    OcTreeT* m_octree;
         for(auto file : files)
         {
         Centroid centroid;
         centroid.path = map_dir_ + file;
-        std::cout <<"map path: "<< centroid.path<<std::endl; 
+        std::cout <<"map path: "<< centroid.path<<std::endl;
         double x_sum=0, y_sum=0;
         int num_oct = 0;
         if (!m_octree->readBinary(centroid.path))
@@ -148,7 +147,7 @@ MapLoader::MapLoader(double &margin, std::string &PATH, std::string map_format) 
             std::cout<<file<<" load failed"<<std::endl;
             return;
           }
-       
+
         for (OcTreeT::iterator it = m_octree->begin(m_octree->getTreeDepth()),
                                 end = m_octree->end(); it != end; ++it)
             {
@@ -224,7 +223,7 @@ MapLoader::MapLoader(double &margin, std::string &PATH, std::string map_format) 
     }
 
     sensor_msgs::PointCloud2 MapLoader::createMapFromBT(std::vector<std::string>& map_paths)
-    { 
+    {
         sensor_msgs::PointCloud2 map_, part_;
         if (!last_maps.empty())
         {
@@ -247,7 +246,7 @@ MapLoader::MapLoader(double &margin, std::string &PATH, std::string map_format) 
             if (!octree->readBinary(path))
                 std::cout << path << " load failed" << std::endl;
             pcl::PointCloud<pcl::PointXYZ> pcl_cloud;
-            for(OcTreeT::iterator it = octree->begin(octree->getTreeDepth()), end = octree->end(); 
+            for(OcTreeT::iterator it = octree->begin(octree->getTreeDepth()), end = octree->end();
                 it !=end; ++it )
                 {
                     if(octree->isNodeOccupied(*it))
@@ -312,7 +311,7 @@ MapLoader::MapLoader(double &margin, std::string &PATH, std::string map_format) 
         }
         return neighborFound;
     }
-    
+
 
     void MapLoader::inArea(const geometry_msgs::Pose& p, std::map<double, Centroid>& dist_centroids)
     {
@@ -361,7 +360,7 @@ MapLoader::MapLoader(double &margin, std::string &PATH, std::string map_format) 
         std::vector<std::pair<double, double>> last_xy_markers;
 
         inArea(p, dist_centroids);
-        
+
         if(dist_centroids.size()==0)
         {
            // std::cout << "x:" << p.position.x << "\n"
@@ -575,7 +574,7 @@ MapLoader::MapLoader(double &margin, std::string &PATH, std::string map_format) 
                         computePCDCentroid(files);
                     else if (map_format_ == "bt")
                         computeBTCentroid(files);
-                }    
+                }
             }
         }
         else
@@ -589,8 +588,8 @@ MapLoader::MapLoader(double &margin, std::string &PATH, std::string map_format) 
                computeBTCentroid(files);
             end = clock();
             std::cout << "load all time: " << (double)(end - start) / CLOCKS_PER_SEC << "S" << std::endl;
-        }        
-        
+        }
+
         pose_sub = nh_.subscribe("/ndt_pose",5,&MapLoader::publishMap,this);
         map_pub = nh_.advertise<sensor_msgs::PointCloud2>("/points_map",1,true);
         new_cen_pub = nh_.advertise<visualization_msgs::Marker>("new_map_centroids",0);
