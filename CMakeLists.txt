@@ -3,6 +3,11 @@ project(map_loader)
 
 set(CMAKE_CXX_FLAGS -std=c++11)
 
+#添加调试模式
+# SET(CMAKE_BUILD_TYPE "Debug")
+# SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g2 -ggdb")
+# SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
+
 set(PACKAGE_DEPENDENCIES
   roscpp
   visualization_msgs
@@ -58,6 +63,9 @@ target_link_libraries(map_loader_node ${PROJECT_NAME} ${LINK_LIBS})
 
 add_executable(estimate src/estimate.cpp)
 target_link_libraries(estimate ${PROJECT_NAME} ${LINK_LIBS})
+
+add_executable(statistical_remove src/statistical_remove.cpp)
+target_link_libraries(statistical_remove ${PROJECT_NAME} ${LINK_LIBS})
 
 #add_executable(octomap_color_server_node src/octomap_color_server_node.cpp)
 #target_link_libraries(octomap_color_server_node ${PROJECT_NAME} ${LINK_LIBS})
