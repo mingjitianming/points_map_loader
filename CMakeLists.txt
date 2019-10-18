@@ -67,6 +67,9 @@ target_link_libraries(estimate ${PROJECT_NAME} ${LINK_LIBS})
 add_executable(statistical_remove src/statistical_remove.cpp)
 target_link_libraries(statistical_remove ${PROJECT_NAME} ${LINK_LIBS})
 
+add_executable(transform_points_map src/transform_points_map.cpp)
+target_link_libraries(transform_points_map ${PROJECT_NAME} ${LINK_LIBS})
+
 #add_executable(octomap_color_server_node src/octomap_color_server_node.cpp)
 #target_link_libraries(octomap_color_server_node ${PROJECT_NAME} ${LINK_LIBS})
 #[[

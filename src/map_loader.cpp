@@ -175,27 +175,27 @@ void MapLoader::publishCurrentMap(sensor_msgs::PointCloud2 &&cloud)
     if (cloud.width != 0) // && map_pub.getNumSubscribers() > 0
     {
         /**********************叉车地图与激光均倒置时使用***********************************/
-        pcl::PointCloud<pcl::PointXYZ> map;
-        pcl::fromROSMsg(cloud, map);
-        tf::TransformListener local_transform_listener;
-        tf::StampedTransform local_transform;
-        try
-        {
-            ros::Time now = ros::Time(0);
-            local_transform_listener.waitForTransform("/map1", "/map", now, ros::Duration(10.0));
-            local_transform_listener.lookupTransform("/map1", "/map", now, local_transform);
-        }
-        catch (tf::TransformException &ex)
-        {
-            ROS_ERROR("%s", ex.what());
-        }
-        pcl_ros::transformPointCloud(map, map, local_transform);
-        map.header.frame_id = "/map";
-        // cloud.header.frame_id = "/map";
-        sensor_msgs::PointCloud2 map_p;
-        pcl::toROSMsg(map, map_p);
-        // map_pub.publish(cloud);
-        map_pub.publish(map_p);
+        // pcl::PointCloud<pcl::PointXYZ> map;
+        // pcl::fromROSMsg(cloud, map);
+        // tf::TransformListener local_transform_listener;
+        // tf::StampedTransform local_transform;
+        // try
+        // {
+        //     ros::Time now = ros::Time(0);
+        //     local_transform_listener.waitForTransform("/map1", "/map", now, ros::Duration(10.0));
+        //     local_transform_listener.lookupTransform("/map1", "/map", now, local_transform);
+        // }
+        // catch (tf::TransformException &ex)
+        // {
+        //     ROS_ERROR("%s", ex.what());
+        // }
+        // pcl_ros::transformPointCloud(map, map, local_transform);
+        // map.header.frame_id = "/map";
+        // // cloud.header.frame_id = "/map";
+        // sensor_msgs::PointCloud2 map_p;
+        // pcl::toROSMsg(map, map_p);
+        // // map_pub.publish(cloud);
+        // map_pub.publish(map_p);
         /******************************************************************************/
         //    std::cout<<"map published"<<std::endl;
         /********************正常使用代码*************************************/
@@ -205,8 +205,8 @@ void MapLoader::publishCurrentMap(sensor_msgs::PointCloud2 &&cloud)
         //  sor.setMeanK (50);
         //  sor.setStddevMulThresh (0.2);
         //  sor.filter (*cloud_filtered);
-        // cloud.header.frame_id = "/map";
-        // map_pub.publish(*cloud_filtered);
+        cloud.header.frame_id = "/map";
+        map_pub.publish(cloud);
         /********************************************************/
     }
 }

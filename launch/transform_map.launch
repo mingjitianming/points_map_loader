@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+
+    <node pkg="tf" type="static_transform_publisher" name="map1_to_map" args="0 0 0 0.0 3.14 0.0 /map1 /map 100" />
+    <node pkg="map_loader" type="transform_points_map" name="transform_map" output="screen">
+        <param name="map_path" value="/home/zmy/data1/bag/forklift/xibu_map/binary_pcd/binary_pcd_002.pcd"/>
+    </node>>
+</launch>
