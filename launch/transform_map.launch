@@ -1,8 +1,11 @@
 <?xml version="1.0"?>
 <launch>
-
-    <node pkg="tf" type="static_transform_publisher" name="map1_to_map" args="0 0 0 0.0 3.14 0.0 /map1 /map 100" />
+    <param name="use_sim_time" value="false"/>
+    <!-- <node pkg="tf" type="static_transform_publisher" name="map1_to_map" args="0 0 0 0.0 3.14 0.0 /map1 /map 100" /> -->
+    <node pkg="tf" type="static_transform_publisher" name="map1_to_map" args="0 0 2.0 0.0 0 0.0 /map1 /map 100" />
     <node pkg="map_loader" type="transform_points_map" name="transform_map" output="screen">
-        <param name="map_path" value="/home/zmy/data1/bag/forklift/xibu_map/binary_pcd/binary_pcd_002.pcd"/>
+        <param name="map_in_path" value="/home/zmy/data1/bag/forklift/xibu_map/binary_pcd/transformed_points_map.pcd"/>
+        <param name="map_out_path" value="/home/zmy/data1/bag/forklift/xibu_map/binary_pcd/transformed_points_map1.pcd"/>
+
     </node>>
 </launch>

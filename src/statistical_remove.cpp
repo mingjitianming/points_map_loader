@@ -11,7 +11,7 @@ int main(int argc, char **argv)
     // Fill in the cloud data
     pcl::PCDReader reader;
     // Replace the path below with the path where you saved your file
-    reader.read<pcl::PointXYZI>("/home/zmy/data1/bag/forklift/xibu_map/binary_pcd/binary_pcd_001.pcd", *cloud);
+    reader.read<pcl::PointXYZI>("/home/zmy/data1/bag/forklift/suibei_mapping/binary_pcd/map_ndt1.pcd", *cloud);
 
     std::cerr << "Cloud before filtering: " << std::endl;
 
@@ -19,14 +19,14 @@ int main(int argc, char **argv)
     pcl::StatisticalOutlierRemoval<pcl::PointXYZI> sor;
     sor.setInputCloud(cloud);
     sor.setMeanK(50);
-    sor.setStddevMulThresh(0.2);
+    sor.setStddevMulThresh(0.5);
     sor.filter(*cloud_filtered);
 
     std::cerr << "Cloud after filtering: " << std::endl;
 
     // pcl::PCDWriter writer;
     // writer.writeBinary<pcl::PointXYZI>("/home/zmy/data1/bag/forklift/xibu_map/binary_pcd/binary_pcd_002.pcd", *cloud_filtered);
-    pcl::io::savePCDFileBinary("/home/zmy/data1/bag/forklift/xibu_map/binary_pcd/binary_pcd_002.pcd", *cloud_filtered);
+    pcl::io::savePCDFileBinary("/home/zmy/data1/bag/forklift/suibei_mapping/binary_pcd/map_ndt2.pcd", *cloud_filtered);
 
     // sor.setNegative(true);
     // sor.filter(*cloud_filtered);

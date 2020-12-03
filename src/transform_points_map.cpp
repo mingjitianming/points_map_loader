@@ -8,7 +8,8 @@ int main(int argc, char **argv)
 {
     ros::init(argc, argv, "transform_points_map");
     ros::NodeHandle nh("~");
-    std::string map_path;
+    std::string map_in_path;
+    std::string map_out_path;
 
     tf::TransformListener local_transform_listener;
     tf::StampedTransform local_transform;
@@ -24,24 +25,26 @@ int main(int argc, char **argv)
         ROS_ERROR("%s", ex.what());
     }
 
-    nh.param("map_path", map_path, std::string("/home/zmy/data1/bag/forklift/xibu_map/binary_pcd/binary_pcd_002.pcd"));
-    std::cout << "map_path" << map_path << std::endl;
-    if (map_path == "")
+    nh.param("map_in_path", map_in_path, std::string("/home/zmy/data1/bag/forklift/xibu_map/binary_pcd/binary_pcd_002.pcd"));
+    nh.param("map_out_path", map_out_path, map_in_path);
+    std::cout << "map_in_path" << map_in_path << std::endl;
+    std::cout << "map_out_path" << map_out_path << std::endl;
+    if (map_in_path == "")
     {
-        ROS_ERROR("map_path is null");
+        ROS_ERROR("map_in_path is null");
         return -1;
     }
     pcl::PointCloud<pcl::PointXYZI> cloud_in;
     pcl::PointCloud<pcl::PointXYZI> cloud_out;
-    pcl::io::loadPCDFile(map_path.c_str(), cloud_in);
-    std::cout << "has load" << map_path << std::endl;
+    pcl::io::loadPCDFile(map_in_path.c_str(), cloud_in);
+    std::cout << "has load" << map_in_path << std::endl;
     pcl_ros::transformPointCloud(cloud_in, cloud_out, local_transform);
     std::cout << "has transformed map" << std::endl;
     // if (access(down_sample_path.c_str(), 0) != 0)
     // {
     //     mkdir(down_sample_path.c_str(), S_IRUSR | S_IWUSR | S_IXUSR | S_IRWXG | S_IRWXO);
     // }/home/zmy/data1/bag/forklift/xibu_map/binary_pcd/binary_pcd_002.pcd
-    pcl::io::savePCDFileBinary("/home/zmy/transformed_points_map.pcd", cloud_out);
+    pcl::io::savePCDFileBinary(map_out_path, cloud_out);
     std::cout << "turn over " << std::endl;
     return 0;
 }
